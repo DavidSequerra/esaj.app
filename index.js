@@ -50,7 +50,7 @@ function minhaFunfa(x) {
           clearInterval(intervalId);
         }
       });
-    }, 3000);
+    }, 1000000);
   });
 }
 
