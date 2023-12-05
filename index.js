@@ -54,6 +54,9 @@ function minhaFunfa(x) {
     }(), 1000000);
   });
 }
+function myfunction() {
+  console.log(1)
+}
 
 button.addEventListener("click", function () {
   if (!numberInput.value) {
