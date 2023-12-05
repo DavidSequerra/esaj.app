@@ -6,6 +6,7 @@ const divao = document.getElementById("divao");
 const oProcesso = document.getElementById("oProcesso");
 const parser = new DOMParser();
 let intervalId;
+
 async function fetchData(x) {
   try {
     const response = await fetch(`${x}`);
@@ -50,7 +51,7 @@ function minhaFunfa(x) {
           clearInterval(intervalId);
         }
       });
-    }, 1000000);
+    }(), 1000000);
   });
 }
 
