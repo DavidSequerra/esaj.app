@@ -54,7 +54,6 @@ function ProcessoMonitor(
           lastStatus.innerHTML = descricao2;
           result.innerHTML = "xx";
           alert(`Status de Processo Atualizado`);
-          clearInterval(intervalId);
         }
       });
 
@@ -76,7 +75,7 @@ function ProcessoMonitor(
             clearInterval(intervalId);
           }
         });
-      }, 100000);
+      }, 1000000);
     });
   };
 
