@@ -1,56 +1,46 @@
-const button = document.getElementById("button");
-const result = document.getElementById("result");
-const numberInput = document.getElementById("numberInput");
-const lastStatus = document.getElementById("lastStatus");
-const divao = document.getElementById("divao");
-const oProcesso = document.getElementById("oProcesso");
-const parser = new DOMParser();
-let intervalId;
+function ProcessoMonitor(
+  containerId,
+  inputId,
+  buttonId,
+  resultId,
+  lastStatusId,
+  oProcessoId
+) {
+  const container = document.getElementById(containerId);
+  const input = container.querySelector(`#${inputId}`);
+  const button = container.querySelector(`#${buttonId}`);
+  const result = container.querySelector(`#${resultId}`);
+  const lastStatus = container.querySelector(`#${lastStatusId}`);
+  const oProcesso = container.querySelector(`#${oProcessoId}`);
+  const parser = new DOMParser();
+  let intervalId;
 
-async function fetchData(x) {
-  try {
-    const response = await fetch(`${x}`);
+  async function fetchData() {
+    try {
+      const response = await fetch(input.value);
 
-    if (response.ok) {
-      const data = await response.text(); // Use response.json() for JSON data
-      return data;
-    } else {
-      throw new Error("Network response was not ok.");
+      if (response.ok) {
+        const data = await response.text();
+        return data;
+      } else {
+        throw new Error("Network response was not ok.");
+      }
+    } catch (error) {
+      alert("URL Inválida ou Indisponível", error);
     }
-  } catch (error) {
-    alert("URL Invalida ou Indisponivel", error);
   }
-}
 
-function minhaFunfa(x) {
-  fetchData(x).then((data) => {
-    const htmlData = parser.parseFromString(data, "text/html");
-    const descricaoMovimentacao = htmlData.querySelector(
-      ".descricaoMovimentacao"
-    );
-    const numeroProcesso = htmlData.getElementById("numeroProcesso");
-    oProcesso.innerHTML = `<strong>Numero do Processo - ${numeroProcesso.innerHTML}</strong>`;
-    const descricao1 = descricaoMovimentacao.innerHTML;
-    lastStatus.innerHTML = descricao1;
-    fetchData(x).then((data2) => {
-      const htmlData2 = parser.parseFromString(data2, "text/html");
-      const descricaoMovimentacao2 = htmlData2.querySelector(
+  this.startMonitoring = function () {
+    fetchData().then((data) => {
+      const htmlData = parser.parseFromString(data, "text/html");
+      const descricaoMovimentacao = htmlData.querySelector(
         ".descricaoMovimentacao"
       );
-      const descricao2 = descricaoMovimentacao2.innerHTML;
-      if (descricao1 === descricao2) {
-        const date = new Date();
-        const mydate = date.toLocaleString();
-        result.innerHTML = "Nenhuma Modificacao" + " - " + mydate;
-      } else {
-        lastStatus.innerHTML = descricao2;
-        result.innerHTML = "";
-
-        alert(`Status de Processo Atualizado`);
-      }
-    });
-    intervalId = setInterval(function () {
-      fetchData(x).then((data2) => {
+      const numeroProcesso = htmlData.getElementById("numeroProcesso");
+      oProcesso.innerHTML = `<strong>Número do Processo - ${numeroProcesso.innerHTML}</strong>`;
+      const descricao1 = descricaoMovimentacao.innerHTML;
+      lastStatus.innerHTML = descricao1;
+      fetchData().then((data2) => {
         const htmlData2 = parser.parseFromString(data2, "text/html");
         const descricaoMovimentacao2 = htmlData2.querySelector(
           ".descricaoMovimentacao"
@@ -59,28 +49,93 @@ function minhaFunfa(x) {
         if (descricao1 === descricao2) {
           const date = new Date();
           const mydate = date.toLocaleString();
-          result.innerHTML = "Nenhuma Modificacao" + " - " + mydate;
+          result.innerHTML = "Nenhuma Modificação" + " - " + mydate;
         } else {
           lastStatus.innerHTML = descricao2;
-          result.innerHTML = "";
-
+          result.innerHTML = "xx";
           alert(`Status de Processo Atualizado`);
           clearInterval(intervalId);
-
-        };
+        }
       });
-    }, 100000);
+
+      intervalId = setInterval(function () {
+        fetchData().then((data2) => {
+          const htmlData2 = parser.parseFromString(data2, "text/html");
+          const descricaoMovimentacao2 = htmlData2.querySelector(
+            ".descricaoMovimentacao"
+          );
+          const descricao2 = descricaoMovimentacao2.innerHTML;
+          if (descricao1 === descricao2) {
+            const date = new Date();
+            const mydate = date.toLocaleString();
+            result.innerHTML = "Nenhuma Modificação" + " - " + mydate;
+          } else {
+            lastStatus.innerHTML = descricao2;
+            result.innerHTML = "xx";
+            alert(`Status de Processo Atualizado`);
+            clearInterval(intervalId);
+          }
+        });
+      }, 100000);
+    });
+  };
+
+  button.addEventListener("click", () => {
+    if (!input.value) {
+      alert("Insira uma URL");
+    } else {
+      clearInterval(intervalId);
+      this.startMonitoring();
+    }
   });
 }
 
-button.addEventListener("click", function () {
-  if (!numberInput.value) {
-    alert("Insira uma URL");
-  } else {
-    minhaFunfa(numberInput.value);
-    numberInput.value = "";
-  }
-});
+const processoMonitor1 = new ProcessoMonitor(
+  "divao",
+  "numberInput",
+  "button",
+  "result",
+  "lastStatus",
+  "oProcesso"
+);
+processoMonitor1.startMonitoring();
+
+const processoMonitor2 = new ProcessoMonitor(
+  "divao2",
+  "numberInput2",
+  "button2",
+  "result2",
+  "lastStatus2",
+  "oProcesso2"
+);
+processoMonitor2.startMonitoring();
+const processoMonitor3 = new ProcessoMonitor(
+  "divao3",
+  "numberInput3",
+  "button3",
+  "result3",
+  "lastStatus3",
+  "oProcesso3"
+);
+processoMonitor3.startMonitoring();
+const processoMonitor4 = new ProcessoMonitor(
+  "divao4",
+  "numberInput4",
+  "button4",
+  "result4",
+  "lastStatus4",
+  "oProcesso4"
+);
+processoMonitor4.startMonitoring();
+const processoMonitor5 = new ProcessoMonitor(
+  "divao5",
+  "numberInput5",
+  "button5",
+  "result5",
+  "lastStatus5",
+  "oProcesso5"
+);
+processoMonitor5.startMonitoring();
 
 //////Mail Structure(requires $npm install nodemailer)
 // const nodemailer = require("nodemailer");
